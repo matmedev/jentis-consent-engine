@@ -1,8 +1,10 @@
 <!doctype html>
 <html>
 	<head>
+		<script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="6ce9041e-0a68-4f04-883f-68eb02b0b4b2" data-blockingmode="auto" data-culture="EN" type="text/javascript"></script>
+
 		<title>JENTIS Consent Engine Test</title>
-		
+
 		<script>
 			document.addEventListener('jentis.consent.engine.minimal-consent-given', function (e)
 			{
@@ -20,77 +22,76 @@
 			{
 				console.log("Show Bar now: %o",e.detail);
 			});
-						
+
 			document.addEventListener('jentis.consent.engine.vendor-change', function (e)
 			{
 				console.log("Vendor Changed: %o",e.detail);
-			});			
+			});
 
 			document.addEventListener('jentis.consent.engine.vendor-add', function (e)
 			{
 				console.log("Vendor Add: %o",e.detail);
-			});			
+			});
 
 			document.addEventListener('jentis.consent.engine.init', function (e)
 			{
 				console.log("CMP Init: %o",e.detail);
-			});			
-			
+			});
 		</script>
-		
-		<script src="./test_conf1.js"></script>
-		<script src="../JentisConsentEngine.js" /></script>
-		<script src="./JCE_bridge_GTM.js" /></script>
-		
+
+		<script src="./test_conf.js"></script>
+		<script src="../JentisConsentEngine.js"></script>
+		<script src="./JCE_bridge_GTM.js"></script>
+		<script src="./JCE_bridge_CB.js"></script>
+
 		<script>
-		
-		
 		function acceptAll()
 		{
 			jentis.consent.engine.AcceptAll();
 		}
-		
+
 		function acceptGa()
-		{		
+		{
 			var sConsentId = jentis.consent.engine.setNewVendorConsents({
-			  "ga"  : true, 
+			  "ga"  : true,
 			  "fb"  : true
-			});		
+			});
 		}
-		
+
 		function denyAll()
-		{		
+		{
 			var sConsentId = jentis.consent.engine.DenyAll();
 		}
-		
+
 		function MigrateOldConsent()
 		{
 			var aData = {
 				consentid: "TESTTESTTEST",
 				lastupdate: 100,
-				vendors: {"ga":true,"fb":false,"adw":false}				
-			};			
+				vendors: {"ga":true,"fb":false,"adw":false}
+			};
 			var sJson = JSON.stringify(aData);
 
 			//Now write it to the local storage
-			localStorage.setItem("jentis.consent.data", sJson);		
+			localStorage.setItem("jentis.consent.data", sJson);
 		}
-		
+
 		function MigrateInTimeConsent()
 		{
 			var aData = {
 				consentid: "TESTTESTTEST",
 				lastupdate: Date.now()-1000,
-				vendors: {"ga":true,"fb":false,"adw":false}				
-			};			
+				vendors: {"ga":true,"fb":false,"adw":false}
+			};
 			var sJson = JSON.stringify(aData);
 
 			//Now write it to the local storage
-			localStorage.setItem("jentis.consent.data", sJson);		
+			localStorage.setItem("jentis.consent.data", sJson);
 		}
-		
-		
-		
+
+		function renewCookiebotConsent() {
+			Cookiebot.renew();
+		}
 		</script>
 		<style>
 			button
@@ -117,6 +118,8 @@
 		<button onClick="MigrateInTimeConsent();">
 			Do old consent IN TIME
 		</button>
-
+		<button onClick="renewCookiebotConsent();">
+			Renew CookieBot consent
+		</button>
 	</body>
 </html>
